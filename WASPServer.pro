@@ -25,12 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    waspdataset.cpp \
-    waspreader.cpp
+    waspreader.cpp \
+    waspdata.cpp \
+    waspdataset.cpp
 
 HEADERS  += mainwindow.hpp \
+    waspreader.hpp \
+    waspdata.hpp \
     waspdataset.hpp \
-    waspreader.hpp
+    xyz.hpp
 
 FORMS    += \
     mainwindow.ui
