@@ -32,8 +32,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.hpp \
     waspreader.hpp \
     waspdata.hpp \
-    waspdataset.hpp \
-    xyz.hpp
+    waspdataset.hpp
 
 FORMS    += \
     mainwindow.ui
