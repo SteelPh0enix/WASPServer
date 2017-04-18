@@ -15,6 +15,9 @@ namespace WASP {
     class Data : public QObject {
         Q_OBJECT
 
+    private:
+        void msg(const QString &msg, const QString &msgTitle = "WASP Data");
+
         QVector<WASP::Dataset> m_data;
         QStringListModel *m_log;
     public:

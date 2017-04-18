@@ -10,8 +10,8 @@ WASP::Dataset::Dataset(ulong timestamp, std::array<ushort, 3> magnetometer, std:
 WASP::Dataset::Dataset(QString &dataset) {
     if (!(dataset[0] == '@')) throw std::invalid_argument(QString("Corrupted dataset: '" + dataset[0] + "' in the beginning").toStdString());
 
-    // @%d#%d|%d|%d#%d|%d|%d#%d|%d|%d#%d|%d|%d|%d|%d#%d|%d|%d[#%s]
-    // mag/accel/gyro/gases/tpa/[gps - optional]
+    // @%d#%d|%d|%d#%d|%d|%d#%d|%d|%d#%d|%d|%d|%d|%d#%d|%d|%d|%d[#%s]
+    // mag/accel/gyro/gases/thpa/[gps - optional]
     QStringList datasplit = dataset.split('#');
 
     if (datasplit.count() < 6) throw std::invalid_argument(QString("Corrupted dataset: " + dataset).toStdString());
@@ -35,7 +35,7 @@ WASP::Dataset::Dataset(QString &dataset) {
     for(size_t i = 0; i < 5; ++i) gases[i] = tmplist[i].toUShort();
 
     tmplist = datasplit[5].split('|');
-    if (tmplist.count() != 3) throw std::invalid_argument(QString("Corrupted dataset - TPA readings: " + datasplit[5]).toStdString());
+    if (tmplist.count() != 4) throw std::invalid_argument(QString("Corrupted dataset - TPA readings: " + datasplit[5]).toStdString());
     temperature = static_cast<float>(tmplist[0].toShort() * 100);
     humidity = tmplist[1].toUShort();
     pressure = static_cast<float>(tmplist[2].toShort() * 100);

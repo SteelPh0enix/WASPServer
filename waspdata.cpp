@@ -17,12 +17,14 @@ void WASP::Data::parseToFile(QString filepath) {
         throw std::invalid_argument(QString("Couldn't open file for writing: " + filepath).toStdString());
 
     QTextStream str(&file);
-    str << WASP::Dataset::getHeader();
+    str << WASP::Dataset::getHeader() << '\n';
     for (const WASP::Dataset& e : m_data)
-        str << e.toString();
+        str << e.toString() << '\n';
 
     str.flush();
     file.close();
+
+    msg("Parsed data to " + filepath);
 }
 
 void WASP::Data::clearData() {
@@ -41,13 +43,19 @@ void WASP::Data::loadFromFile(QString filepath) {
         try {
             m_data.append(WASP::Dataset(line));
         } catch (std::exception &e) {
-            if (m_log != Q_NULLPTR) {
-                m_log->insertRow(m_log->rowCount());
-                m_log->setData(m_log->index(m_log->rowCount()-1), e.what());
-            } else {
-                QMessageBox::warning(Q_NULLPTR, QString("Parse error"), QString(e.what()));
-            }
+            msg(e.what(), "Error while parsing!");
         }
         line = str.readLine();
+    }
+
+   msg("Loaded data from " + filepath);
+}
+
+void WASP::Data::msg(const QString &msg, const QString &msgTitle) {
+    if (m_log != Q_NULLPTR) {
+        m_log->insertRow(m_log->rowCount());
+        m_log->setData(m_log->index(m_log->rowCount()-1), msg);
+    } else {
+        QMessageBox::information(Q_NULLPTR, msgTitle, msg);
     }
 }
