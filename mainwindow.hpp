@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QApplication>
+#include <QFileDialog>
+#include <QString>
 #include <QStringListModel>
 #include "waspdata.hpp"
 #include "waspreader.hpp"
@@ -16,22 +18,24 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    QStringListModel logModel;
-    WASPData data;
-    WASPReader reader;
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
 private:
     Ui::CanSatWindow *ui;
+    QStringListModel logModel;
+    QStringListModel gpsModel;
+    WASP::Data data;
+    WASP::Reader reader;
 
 private slots:
     void exit();
     void parseFile();
     void connectToWASP();
     void saveData();
+public slots:
+    void update(const WASP::Dataset &data);
 };
 
 #endif // MAINWINDOW_HPP

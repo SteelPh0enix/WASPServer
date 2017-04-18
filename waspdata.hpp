@@ -6,26 +6,27 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
-#include <QStringList>
+#include <QStringListModel>
+#include <QMessageBox>
 #include <stdexcept>
 #include "waspdataset.hpp"
 
-class WASPData : public QObject {
-    Q_OBJECT
+namespace WASP {
+    class Data : public QObject {
+        Q_OBJECT
 
-    QVector<WASPDataset> m_data;
-    QStringList m_log;
-public:
-    explicit WASPData(QObject *parent = 0);
+        QVector<WASP::Dataset> m_data;
+        QStringListModel *m_log;
+    public:
+        explicit Data(QObject *parent = 0, QStringListModel *logModel = Q_NULLPTR);
 
-    void parseToFile(QString filepath);
-    void loadFromFile(QString filepath);
-    void clearData();
-    const QStringList& getLog() const;
-signals:
-    void dataAdded(WASPDataset data);
-public slots:
-    void addData(WASPDataset data);
-};
-
+        void parseToFile(QString filepath);
+        void loadFromFile(QString filepath);
+        void clearData();
+    signals:
+        void dataAdded(const WASP::Dataset &data);
+    public slots:
+        void addData(WASP::Dataset data);
+    };
+}
 #endif // WASPDATA_HPP

@@ -3,15 +3,17 @@
 
 #include <QObject>
 
-class WASPReader : public QObject
-{
-    Q_OBJECT
-public:
-    explicit WASPReader(QObject *parent = 0);
+namespace WASP {
+    class Reader : public QObject
+    {
+        Q_OBJECT
+    public:
+        explicit Reader(QObject *parent = 0);
 
-signals:
+    signals:
 
-public slots:
-};
+    public slots:
+    };
+}
 
 #endif // WASPREADER_HPP

@@ -1,6 +1,6 @@
 #include "waspreader.hpp"
 
-WASPReader::WASPReader(QObject *parent) : QObject(parent)
+WASP::Reader::Reader(QObject *parent) : QObject(parent)
 {
 
 }
