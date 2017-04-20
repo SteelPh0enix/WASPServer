@@ -928,12 +928,12 @@
      <x>0</x>
      <y>0</y>
      <width>903</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Plik</string>
+     <string>&amp;Plik</string>
     </property>
     <addaction name="action_ParseLog"/>
     <addaction name="separator"/>
@@ -941,7 +941,7 @@
    </widget>
    <widget class="QMenu" name="menuWASP">
     <property name="title">
-     <string>WASP</string>
+     <string>&amp;WASP</string>
     </property>
     <addaction name="action_ConnectToWASP"/>
     <addaction name="action_SaveData"/>
@@ -952,22 +952,22 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_ParseLog">
    <property name="text">
-    <string>Przeparsuj plik z logiem</string>
+    <string>&amp;Przeparsuj plik z logiem</string>
    </property>
   </action>
   <action name="action_Exit">
    <property name="text">
-    <string>Wyjście</string>
+    <string>Wyjści&amp;e</string>
    </property>
   </action>
   <action name="action_ConnectToWASP">
    <property name="text">
-    <string>Połącz z WASPem</string>
+    <string>Połącz z &amp;WASPem</string>
    </property>
   </action>
   <action name="action_SaveData">
    <property name="text">
-    <string>Zapisz odczytane dane do pliku</string>
+    <string>Zapi&amp;sz odczytane dane do pliku</string>
    </property>
   </action>
  </widget>
