@@ -15,7 +15,6 @@ namespace WASP {
     class Data : public QObject {
         Q_OBJECT
 
-    private:
         void msg(const QString &msg, const QString &msgTitle = "WASP Data");
 
         QVector<WASP::Dataset> m_data;
@@ -26,6 +25,7 @@ namespace WASP {
         void parseToFile(QString filepath);
         void loadFromFile(QString filepath);
         void clearData();
+        bool isEmpty();
     signals:
         void dataAdded(const WASP::Dataset &data);
     public slots:

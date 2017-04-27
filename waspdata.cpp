@@ -59,3 +59,7 @@ void WASP::Data::msg(const QString &msg, const QString &msgTitle) {
         QMessageBox::information(Q_NULLPTR, msgTitle, msg);
     }
 }
+
+bool WASP::Data::isEmpty() {
+    return m_data.empty();
+}

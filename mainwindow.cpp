@@ -2,17 +2,18 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::CanSatWindow),
-    data(this, &logModel), reader(this) {
+    data(this, &logModel), reader(this, &logModel) {
     ui->setupUi(this);
 
     ui->listView_Log->setModel(&logModel);
     ui->listView_GPS->setModel(&gpsModel);
 
-    connect(ui->action_Exit, SIGNAL(triggered()), this, SLOT(exit()));
-    connect(ui->action_ConnectToWASP, SIGNAL(triggered()), this, SLOT(connectToWASP()));
-    connect(ui->action_ParseLog, SIGNAL(triggered()), this, SLOT(parseFile()));
-    connect(ui->action_SaveData, SIGNAL(triggered()), this, SLOT(saveData()));
-    connect(&data, SIGNAL(dataAdded(WASP::Dataset)), this, SLOT(update(WASP::Dataset)));
+    QObject::connect(ui->action_Exit, &QAction::triggered, this, &MainWindow::exit);
+    QObject::connect(ui->action_ConnectToWASP, &QAction::triggered, this, &MainWindow::connectToWASP);
+    QObject::connect(ui->action_ParseLog, &QAction::triggered, this, &MainWindow::parseFile);
+    QObject::connect(ui->action_SaveData, &QAction::triggered, this, &MainWindow::saveData);
+    QObject::connect(&data, &WASP::Data::dataAdded, this, &MainWindow::update);
+    QObject::connect(&reader, &WASP::Reader::sendData, &data, &WASP::Data::addData);
 }
 
 MainWindow::~MainWindow()
@@ -37,10 +38,15 @@ void MainWindow::parseFile() {
 }
 
 void MainWindow::connectToWASP() {
-    QMessageBox::information(this, QString("connectToWASP"), QString("To be implemented"));
+   reader.connect();
 }
 
 void MainWindow::saveData() {
+    if (data.isEmpty()) {
+        QMessageBox::critical(this, "Error", "No data to save!");
+        return;
+    }
+
     QString filename = QFileDialog::getSaveFileName(this, "Wybierz plik do zapisu", QString(), "Pliki tekstowe (*.txt)");
     if (filename.isNull()) return;
 

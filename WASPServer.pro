@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,15 +27,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     waspreader.cpp \
     waspdata.cpp \
-    waspdataset.cpp
+    waspdataset.cpp \
+    portselectdialog.cpp
 
 HEADERS  += mainwindow.hpp \
     waspreader.hpp \
     waspdata.hpp \
-    waspdataset.hpp
+    waspdataset.hpp \
+    portselectdialog.hpp
 
 FORMS    += \
-    mainwindow.ui
+    mainwindow.ui \
+    portselectdialog.ui
 
 RESOURCES += \
     qdarkstyle/style.qrc
