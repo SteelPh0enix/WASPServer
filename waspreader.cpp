@@ -2,7 +2,8 @@
 
 WASP::Reader::Reader(QObject *parent, QStringListModel *model) : QObject(parent), m_log(model), serial(this) {
     QObject::connect(&dialog, &PortSelectDialog::portSelected, this, &WASP::Reader::portIsSelected);
-    serial.setBaudRate(QSerialPort::Baud38400);
+    QObject::connect(&serial, &QSerialPort::readyRead, this, &WASP::Reader::readData);
+    serial.setBaudRate(QSerialPort::Baud115200);
     serial.setDataBits(QSerialPort::Data8);
     serial.setParity(QSerialPort::NoParity);
     serial.setStopBits(QSerialPort::OneStop);
@@ -18,8 +19,8 @@ void WASP::Reader::portIsSelected(QSerialPortInfo port) {
     serial.setPort(serialInfo);
     msg("Selected port: " + port.systemLocation());
 
-    msg("Connecting to " + serialInfo.systemLocation() + "with baud 38400");
-    if(!serial.open(QSerialPort::ReadWrite | QSerialPort::Text)) {
+    msg("Connecting to " + serialInfo.systemLocation() + "with baud 115200");
+    if(!serial.open(QIODevice::ReadWrite)) {
         msg("Error #" + QString::number(serial.error()) + " - couldn't connect!");
         msg(serial.errorString());
     }
@@ -34,47 +35,12 @@ void WASP::Reader::msg(const QString &msg, const QString &msgTitle) {
     }
 }
 
-void WASP::Reader::startReading() {
-    worker = new SerialReader(this);
-    worker->moveToThread(&readThread);
-    QObject::connect(worker, &SerialReader::startWorking, this, &WASP::Reader::start);
-    QObject::connect(worker, &SerialReader::stopWorking, this, &WASP::Reader::stop);
-    QObject::connect(worker, &SerialReader::dataReaded, this, &WASP::Reader::moveData);
-    readThread.start();
-}
-
-void WASP::Reader::stopReading() {
-    emit stop();
-}
-
-void WASP::Reader::workerStopped() {
-    readThread.quit();
-    readThread.wait();
-}
-
-void WASP::Reader::moveData(WASP::Dataset data) {
-    emit sendData(data);
-}
-
-WASP::SerialReader::SerialReader(QObject *parent) : QObject(parent), work(true), finished(false) {
-
-}
-
-void WASP::SerialReader::stopWorking() {
-    work = false;
-}
-
-void WASP::SerialReader::startWorking() {
-    work = true;
-}
-
-void WASP::SerialReader::readData(const QSerialPort &port) {
-    WASP::Dataset readed;
-    QString rawdata;
-    while(work) {
-        //TODO: go back to fucking signal&slot, because i fucked up hard
-        //read the docs next time
-        emit dataReaded(readed);
-    }
-    emit stopped();
+void WASP::Reader::readData() {
+    QByteArray rawdata = serial.readLine();
+    QString strdata = QString::fromLatin1(rawdata);
+    //if (strdata[0] == '@' && strdata.length() > 80) {
+    //QMessageBox::information(Q_NULLPTR, QString::number(strdata.length()), strdata);
+    WASP::Dataset data(strdata);
+    emit dataReceived(data);
+    //}
 }

@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::CanSat
     QObject::connect(ui->action_ParseLog, &QAction::triggered, this, &MainWindow::parseFile);
     QObject::connect(ui->action_SaveData, &QAction::triggered, this, &MainWindow::saveData);
     QObject::connect(&data, &WASP::Data::dataAdded, this, &MainWindow::update);
-    QObject::connect(&reader, &WASP::Reader::sendData, &data, &WASP::Data::addData);
+    QObject::connect(&reader, &WASP::Reader::dataReceived, &data, &WASP::Data::addData);
 }
 
 MainWindow::~MainWindow()

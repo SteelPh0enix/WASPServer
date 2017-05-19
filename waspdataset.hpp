@@ -8,6 +8,7 @@
 #include <QtMath>
 #include <array>
 #include <stdexcept>
+#include <QDebug>
 
 namespace WASP {
     struct Dataset {

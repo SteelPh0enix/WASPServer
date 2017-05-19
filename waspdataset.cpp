@@ -8,34 +8,35 @@ WASP::Dataset::Dataset(ulong timestamp, std::array<ushort, 3> magnetometer, std:
                           gases(gases), humidity(humidity), temperature(temperature), pressure(pressure), altitude(altitude), GPS(GPS) {}
 
 WASP::Dataset::Dataset(QString &dataset) {
-    if (!(dataset[0] == '@')) throw std::invalid_argument(QString("Corrupted dataset: '" + dataset[0] + "' in the beginning").toStdString());
+    qDebug() << dataset << '\n';
+    if (!(dataset[0] == '@')) return; //throw std::invalid_argument(QString("Corrupted dataset: '" + dataset[0] + "' in the beginning").toStdString());
 
     // @%d#%d|%d|%d#%d|%d|%d#%d|%d|%d#%d|%d|%d|%d|%d#%d|%d|%d|%d[#%s]
     // mag/accel/gyro/gases/thpa/[gps - optional]
     QStringList datasplit = dataset.split('#');
 
-    if (datasplit.count() < 6) throw std::invalid_argument(QString("Corrupted dataset: " + dataset).toStdString());
+    if (datasplit.count() < 6) return; //throw std::invalid_argument(QString("Corrupted dataset: " + dataset).toStdString());
 
     timestamp = datasplit[0].remove(0, 1).toULong();
 
     QStringList tmplist = datasplit[1].split('|');
-    if (tmplist.count() != 3) throw std::invalid_argument(QString("Corrupted dataset - magnetometer readings: " + datasplit[1]).toStdString());
+    if (tmplist.count() != 3) return; //throw std::invalid_argument(QString("Corrupted dataset - magnetometer readings: " + datasplit[1]).toStdString());
     for(size_t i = 0; i < 3; ++i) magnetometer[i] = tmplist[i].toUShort();
 
     tmplist = datasplit[2].split('|');
-    if (tmplist.count() != 3) throw std::invalid_argument(QString("Corrupted dataset - accelerometer readings: " + datasplit[2]).toStdString());
+    if (tmplist.count() != 3) return; //throw std::invalid_argument(QString("Corrupted dataset - accelerometer readings: " + datasplit[2]).toStdString());
     for(size_t i = 0; i < 3; ++i) accelerometer[i] = tmplist[i].toUShort();
 
     tmplist = datasplit[3].split('|');
-    if (tmplist.count() != 3) throw std::invalid_argument(QString("Corrupted dataset - gyroscope readings: " + datasplit[3]).toStdString());
+    if (tmplist.count() != 3) return; //throw std::invalid_argument(QString("Corrupted dataset - gyroscope readings: " + datasplit[3]).toStdString());
     for(size_t i = 0; i < 3; ++i) gyroscope[i] = tmplist[i].toUShort();
 
     tmplist = datasplit[4].split('|');
-    if (tmplist.count() != 5) throw std::invalid_argument(QString("Corrupted dataset - gases readings: " + datasplit[4]).toStdString());
+    if (tmplist.count() != 5) return; //throw std::invalid_argument(QString("Corrupted dataset - gases readings: " + datasplit[4]).toStdString());
     for(size_t i = 0; i < 5; ++i) gases[i] = tmplist[i].toUShort();
 
     tmplist = datasplit[5].split('|');
-    if (tmplist.count() != 4) throw std::invalid_argument(QString("Corrupted dataset - TPA readings: " + datasplit[5]).toStdString());
+    if (tmplist.count() != 4) return; //throw std::invalid_argument(QString("Corrupted dataset - TPA readings: " + datasplit[5]).toStdString());
     temperature = static_cast<float>(tmplist[0].toShort() * 100);
     humidity = tmplist[1].toUShort();
     pressure = static_cast<float>(tmplist[2].toShort() * 100);
